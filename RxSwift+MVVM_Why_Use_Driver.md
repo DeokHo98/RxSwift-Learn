@@ -173,16 +173,20 @@ trigger버튼을 누르고 바로 newButton을 눌러도 프린트는 실행되�
 이렇게 되면 프린트문도 비동기적으로 출력 되고      
 UI에 적용될때만 Driver를 사용해주면 쓰레드 이슈도 생기지 않을 것이다.    
 - ex       
-output에 observable, subject, Relay를 사용해도 상관없으며      
-viewModel의 output으로 나가기전 asDriver를 해줘도 상관 없긴 하다.     
+   
 
 ## 결론
-Driver를 ViewModel 안에서 (Input) 굳이 사용할 필요는 없는것 같다.     
-만약 메인쓰레드에서 이루어져도 상관없는 작은 작업의 경우 스트림이 공유된다는 이점을 보기 위해서라면 사용해도 무방하지만      
-API 호출같은 오래걸리는 작업의 경우 내가 비동기적인 흐름을 원한다면 Driver를 사용했을때 이점은 스트림이 공유된다는점 밖에 없다. (이는 Share 연산자로 대체 가능)    
-    
-또한 Output 역시 공유가 필요가 없다면 굳이 asDriver를 써줄 필요가 없다고 생각한다.    
-왜냐하면 bind(to: ) 역시 메인쓰레드에서만 동작하게끔 되어 있다.
-역시나 output에서도 Driver를 사용하는 이점은 스트림 공유 밖에 없다
+Driver를 ViewModel 안에서 굳이 사용할 필요는 없는것 같다.
+ViewModel 안에서 내가 비동기적인 작업을 할수도 있기 때문.      
+Driver의 원래 사용목적을 생각하면 스트림이 공유되고 메인쓰레드에서만 동작하기 때문에    
+viewModel의 output으로 나가고난뒤 View에서 asDriver를 하는것을 Best라고 생각한다. 
+         
+ViewModel에서 observable, subject, Relay를 사용하는것이 좋아보임.          
+하지만 기본적으로 input output 패턴 자체는 UI관련 작업이기때문에.     
+(사용자의 화면 이벤트를 input으로 받아 어떤 작업을한뒤 output으로 내보내는것이 ViewModel의 기본).     
+error, complete가 불리지 않게하기위해 Relay 사용을 지향하는것이 좋아 보임.  
+                   
+       
+
 
    
